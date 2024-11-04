@@ -1,76 +1,31 @@
-# CAPTCHA Recognition using Convolutional Neural Networks
+# CAPTCHA Recognition using Convolutional Neural Networks (CNN)
 
 ### Introduction:
-CAPTCHAs may be referred to those infuriating images containing the text that needs to be typed in before a person can access a particular website. The full form of CAPTCHA is "Completely Automated Public Turing test to tell Computers and Humans Apart" and as the name suggests it is a way to avert the computer to fill out the form on its own, automatically. However using the concept of deep learning and computer vision, the very purpose of the CAPTCHAs can be defeated. This test can be passed automatically with the help of Convolutional Neural networks(CNN) - a class of the deep neural networks. A CNN is an algorithm of deep learning which takes in an image as input and then assigns some value to various features in the image which further helps to differentiate one feature from the other.
+CAPTCHAs are commonly seen as images containing text that users must type in to verify their identity before accessing certain websites. CAPTCHA stands for "Completely Automated Public Turing test to tell Computers and Humans Apart," designed to prevent bots from automatically filling out forms. However, with advancements in deep learning and computer vision, this test can be solved automatically. Convolutional Neural Networks (CNN), a powerful class of deep neural networks, can be utilized to recognize and defeat CAPTCHA by analyzing the features within these images.
 
 ### Dataset Description:
-The dataset used for this project consists of 1070 .png images of text based CAPTCHA. The dataset has been taken from https://www.researchgate.net/publication/248380891_CAPTCHA_dataset. Each dataset image is of 5 character set and the character set is defined as all English small letters and digits from 0 to 9. To train the model to read this CAPTCHA efficiently, 970 images are used for training purposes and the remaining 100 images are used for testing purposes. 
+The dataset used in this project contains 1,070 PNG images of text-based CAPTCHAs. The dataset has been sourced from a research publication. Each image consists of five characters, composed of English lowercase letters and digits (0-9). For model training, 970 images were used, with the remaining 100 images reserved for testing.
 
 ### Model Development:
-The model is developed using Convolutional Neural Network for detecting the Captcha present in the image. For this purpose, the training sample dataset is first pre-processed and then the model is developed consisting of twenty four layers.
-<p align="center">
-<img src="/Images/Workflow.JPG" alt="Workflow" width="200"/>
- </p>
+A Convolutional Neural Network was developed to detect and decode the CAPTCHA images. Before training, the sample dataset underwent pre-processing, followed by the construction of a 24-layer model.
+
 #### Data Preprocessing:
-The dataset consists of images of size 50 height and 200 width. These images first need to be pre-processed before developing the model. For the purpose of training, the images in the dataset have a filename same as the CAPTCHA possessed by the image. The images are first pre-processed by reading them in grayscale. This helps us to remove the noise to some extent as the images get invariant of the background color. Simultaneously, the file name is also stored in a string.
-Each grayscale image is then scaled and reshaped. Then we create an array of dimension 5*36, used to store the character present at each position in the CAPTCHA. At each position, through filename we find which characters are present at each position of the CAPTCHA and update the corresponding location to one in this array. This array will thus be used for training the model.Thus, after pre-processing we obtain all the grayscale images and the target array containing information regarding the characters present in each CAPTCHA image
-.
-#### Model Development
+The CAPTCHA images are of size 50x200 pixels. Pre-processing involved converting the images to grayscale, reducing the influence of background colors. The CAPTCHA characters are extracted from the image filenames and stored in a target array with dimensions 5x36, representing the five characters and their possible values (26 letters and 10 digits). This array is used for training the model.
 
-The model developed for this CAPTCHA dataset uses CNN. It consists of a total twenty four layers comprising the input layer, convolutional layers, max pooling layers, dense layers, flatten layers and dropout layers. The total numbers of parameters is 1,818,196 where 1,818,132 parameters are trainable and 64 are non-trainable parameters. A brief architecture of the layers is depicted in figure.
-<p align="center">
-<img src="/Images/Layers_Architecture.JPG" alt="Layers" width="50%"/>
- </p>
-The first layer is the input layer which takes the image as input. Then we have convolutional layers and the max pooling layers which extracts the most prominent feautures from the images. The next layer is the batch normalization layer, used to improve the stability of the model.Then we have a flatten layer which converts the input from max pool layer to a long vector of desired dimensions. This is done so as the further neural network is easily processed and the back propagation is carried out easily. Further there are five dense layers in this neural network each of which is connected to the flatten layer. Each of these dense layers deploys the activation function ‘relu’ to train the parameters. Further to each of these dense layers is connected a dropout layer used for regularisation. Following the dropout layer is again a dense layer which uses the activation function ‘sigmoid’. The sigmoid function is also called a logistic function and it transforms the input to values between 0 and 1. 
+#### CNN Model Architecture:
+The CAPTCHA recognition model consists of 24 layers, including input, convolutional, max-pooling, dense, flatten, and dropout layers. The model has a total of 1,818,196 parameters, with 1,818,132 being trainable. After extracting features through convolution and max-pooling layers, the output is passed through batch normalization to stabilize the model, followed by flattening into a vector for further processing. The dense layers, using the ReLU activation function, train the parameters, while dropout layers help in regularization. The final dense layers, with a sigmoid activation function, output the predicted characters in the CAPTCHA.
 
-Thus, the model uses an image of dimension (50, 200, 1) as input and gets output from 5 layers each having dimension 36. The model uses the optimizer ‘Adam’. The model uses loss function as ‘categorical cross entropy’. 
+The input image has dimensions (50, 200, 1), and the model produces five output layers, each with a dimension of 36. The Adam optimizer is employed, along with the categorical cross-entropy loss function.
 
-### Results 
+### Results:
+The model was trained for 60 epochs, showing a steady decrease in loss. After 60 epochs, the training loss reached 0.2391, and the loss on the test set was 2.123. 
 
-After training the model for 60 epochs, the following graph was obtained for loss with respect to the number of epochs. We see that as the number of epoch’s increases, the loss decreases exponentially. The loss at the end of 60 epochs is 0.5932. The loss obtained on training set is 0.2391 while the loss on test set is 2.123.
-
-<p align="center">
-<img src="/Images/epoch_loss.JPG" alt="epoch_loss" width="50%"/>
- </p>
-Next, we analyze how the accuracy obtained at each last dense layer varies with the number of epochs. The graph for accuracy of the output dense layers, namely dense layer 2,4,6,8 and 10 with respect to number of epochs is shown in figures 7,8,9,10,11. Thus we see that as the number of epochs increases, the accuracy of the layers improves and hence the system can predict the CAPTCHA more efficiently. The accuracy obtained after 60 epochs for dense layer 2 is 0.9897, dense layer 4 is 0.9794,  dense layer 6 is 0.9227, dense layer 8 is 0.8969 and for dense layer 10 is 0.9278.
-<p align="center">
-<img src="/Images/epoch_loss_2.JPG" alt="epoch_loss_2" width="50%"/>
-</p>
-<p align="center">
-<img src="/Images/epoch_loss_4.JPG" alt="epoch_loss_4" width="50%"/>
-</p>
-<p align="center">
-<img src="/Images/epoch_loss_6.JPG" alt="epoch_loss_6" width="50%"/>
-</p>
-<p align="center">
-<img src="/Images/epoch_loss_8.JPG" alt="epoch_loss_8" width="50%"/>
- </p>
-<p align="center">
-<img src="/Images/epoch_loss_10.JPG" alt="epoch_loss_10" width="50%"/>
- </p>
-
-
-
-Now, we predict the CAPTCHA using the trained model.
-
-<p align="center">
-<img src="/Images/snippet1.JPG" alt="snippet1" width="50%"/>
-</p>
-
-<p align="center">
-<img src="/Images/snippet2.JPG" alt="snippet2" width="50%"/>
-</p>
-
-Thus, we see that our model predicts the CAPTCHA efficiently for small letters of English language and digits. 
+The accuracy of the output layers after 60 epochs is as follows:
+- Dense Layer 2: 98.97%
+- Dense Layer 4: 97.94%
+- Dense Layer 6: 92.27%
+- Dense Layer 8: 89.69%
+- Dense Layer 10: 92.78%
 
 ### Conclusion:
-CAPTCHA was designed to improve the security of the systems but deep learning algorithms defeated its very purpose. In this project, we used Convolutional Neural networks for CAPTCHA recognition. The dataset consisted of 1070 sample images of which 970 samples have been utilized for training purpose . The images in the dataset have been preprocessed and converted into grayscale for the further training. While training a convolutional neural network of twenty four layers has been developed. The model outputs five layers corresponding to each character of CAPTCHA. The model is trained using 60 epochs and it works well to predict any 5 lettered CAPTCHA. The loss obtained after 60 epochs is 0.5932 and the accuracy of the output layers obtained is as dense layer 2 - 0.9897, dense layer 4 - 0.9794, dense layer 6 - 0.9227, dense layer 8 - 0.8969 and for dense layer 10 - 0.9278. The loss on training set is 0.2391 while the loss on test set is 2.123. The future scope of this work lies to expand this CAPTCHA recognition system for larger and more noisy CAPTCHA containing all the possible symbols.  
-
-## Learn more about our model and its working at
-[Our blog](https://medium.com/@manvi./d191ef91330e)
-
-
-
-
-
-
+While CAPTCHAs are intended to secure websites, deep learning methods, such as CNNs, can effectively recognize and decode them. In this project, we developed a 24-layer CNN model for CAPTCHA recognition using a dataset of 1,070 CAPTCHA images. After pre-processing the images and training the model for 60 epochs, we achieved high accuracy in recognizing the CAPTCHA text. The final model successfully predicted any 5-letter CAPTCHA with satisfactory accuracy and efficiency. Future improvements can expand the model's capabilities to recognize larger and more complex CAPTCHAs containing symbols and additional noise.
